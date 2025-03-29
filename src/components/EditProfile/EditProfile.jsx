@@ -4,7 +4,7 @@ export default function EditProfile() {
         className="popup__container"
         name="profile"
         id="edit-profile" 
-        novalidate
+        noValidate
       >
         <input 
           className="popup__input popup__input-name" 
@@ -12,8 +12,8 @@ export default function EditProfile() {
           id="name-input" 
           name="name" 
           placeholder="Nombre" 
-          minlength="2" 
-          maxlength="40" 
+          minLength="2" 
+          maxLength="40" 
           required
         />
         <span className="popup__input-error name-input-error"></span>
@@ -23,8 +23,8 @@ export default function EditProfile() {
           id="about-input" 
           name="about" 
           placeholder="Acerca de mí"  
-          minlength="2" 
-          maxlength="200" 
+          minLength="2" 
+          maxLength="200" 
           required
         />
         <span className="popup__input-error about-input-error"></span>

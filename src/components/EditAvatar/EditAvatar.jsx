@@ -4,7 +4,7 @@ export default function EditAvatar() {
         className="popup__container"
         name="photoProfile"
         id="edit-avatar" 
-        novalidate
+        noValidate
       >
         <input 
           className="popup__input popup__input-photo" 
