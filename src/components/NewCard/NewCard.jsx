@@ -4,7 +4,7 @@ export default function NewCard() {
       className="popup__container"
       name="image"
       id="new-card" 
-      novalidate
+      noValidate
     >
       <input 
         className="popup__input popup__input-title" 
@@ -12,8 +12,8 @@ export default function NewCard() {
         id="title-input" 
         name="title" 
         placeholder="Título" 
-        minlength="2" 
-        maxlength="30" 
+        minLength="2" 
+        maxLength="30" 
         required
       />
       <span className="popup__input-error title-input-error"></span>
@@ -28,5 +28,5 @@ export default function NewCard() {
       <span className="popup__input-error link-input-error"></span>
       <button className="popup__save-button">Crear</button>
     </form>
-  )
+  );
 }
