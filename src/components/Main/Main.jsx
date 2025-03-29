@@ -6,6 +6,7 @@ import EditAvatar from "../EditAvatar/EditAvatar.jsx";
 import editPhoto from "../../images/editPhoto.png";
 import photo from "../../images/profile.jpg";
 import Card from "./components/Card.jsx";
+import ImagePopup from "./components/ImagePopup.jsx";
 
 const cards = [
   {
@@ -41,6 +42,12 @@ export default function Main () {
   function handleClosePopup() {
     setPopup(null);
   }
+
+  function handleImageClick (card) {
+    const newPopupImage = {title: null, children: <ImagePopup card={card}/>, classPopup: "popup_image"};
+    handleOpenPopup(newPopupImage);
+  }
+
   return(
     <main>
       <section className="profile">
@@ -56,9 +63,9 @@ export default function Main () {
         <button className="profile__add-image" onClick={() => handleOpenPopup(newCardPopup)}></button>
       </section>
       <section className="elements">
-        <ul className="cards__list">
+        <ul className="card__list">
           {cards.map((card) => (
-            <Card key={card._id} card={card}/>
+            <Card key={card._id} card={card} onImageClick={handleImageClick}/>
           ))}
         </ul>
       </section>

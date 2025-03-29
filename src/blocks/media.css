@@ -127,6 +127,10 @@
     gap: 20px;
   }
 
+  .card__list{
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   .footer{
     width: 85%;
     margin: 0 auto 36px;
@@ -275,6 +279,10 @@
     display: grid;
     grid-template-columns: 282px;
     gap: 20px;
+  }
+
+  .card__list{
+    grid-template-columns: 1fr;
   }
 
   .footer{

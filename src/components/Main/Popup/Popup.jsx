@@ -3,7 +3,7 @@ export default function Popup(props) {
   return (
     <div className={`popup ${classPopup}`}>
       <button className="popup__close" onClick={onClose}></button>
-      <h2 className="popup__title">{title}</h2>
+      {title && <h2 className="popup__title">{title}</h2>}
       {children}
     </div>
   )

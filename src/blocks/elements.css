@@ -3,5 +3,5 @@
   width: 100%;
   display: grid;
   grid-template-columns: repeat(3, 282px);
-  gap: 20px 17px;
+  /* gap: 20px 17px; */
 }
