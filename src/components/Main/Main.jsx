@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Popup from "./Popup/Popup.jsx";
 import NewCard from "../NewCard/NewCard.jsx";
 import EditProfile from "../EditProfile/EditProfile.jsx";
@@ -7,33 +7,33 @@ import editPhoto from "../../images/editPhoto.png";
 import photo from "../../images/profile.jpg";
 import Card from "./components/Card.jsx";
 import ImagePopup from "./components/ImagePopup.jsx";
-
-const cards = [
-  {
-    isLiked: false,
-    _id: '5d1f0611d321eb4bdcd707dd',
-    name: 'Yosemite Valley',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_yosemite.jpg',
-    owner: '5d1f0611d321eb4bdcd707dd',
-    createdAt: '2019-07-05T08:10:57.741Z',
-  },
-  {
-    isLiked: false,
-    _id: '5d1f064ed321eb4bdcd707de',
-    name: 'Lake Louise',
-    link: 'https://practicum-content.s3.us-west-1.amazonaws.com/web-code/moved_lake-louise.jpg',
-    owner: '5d1f0611d321eb4bdcd707dd',
-    createdAt: '2019-07-05T08:11:58.324Z',
-  },
-];
-
-console.log(cards);
+import Api from "../../utils/api.js";
 
 export default function Main () {
+  const api = new Api({
+    baseUrl: "https://around-api.es.tripleten-services.com/v1/",
+    headers: {
+      authorization: "f79f57e0-6adb-472c-835e-8925770b15f2",
+      "Content-Type": "application/json"
+    }
+  });
+  const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const newCardPopup = {title: "Nuevo lugar", children: <NewCard/>, classPopup: "popup_add"};
   const newEditProfile = {title: "Editar perfil", children: <EditProfile/>, classPopup: "popup_edit"};
   const newEditAvatar = {title: "Cambiar foto de perfil", children: <EditAvatar/>, classPopup: "popup_edit"};
+
+  useEffect(() => {
+    api.getInitialCards("cards/")
+      .then((item) => {
+        if(Array.isArray(item[0])) {
+          setCards(item[0]);
+        } else {
+          console.warn("Respuesta inesperada: ", item);
+        }
+      })
+      .catch((err) => console.error("Error al obtener tarjetas: ", err));
+  }, []);
 
   function handleOpenPopup(popup) {
     setPopup(popup);
