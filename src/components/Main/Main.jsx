@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Popup from "./Popup/Popup.jsx";
 import NewCard from "../NewCard/NewCard.jsx";
 import EditProfile from "../EditProfile/EditProfile.jsx";
@@ -8,6 +8,7 @@ import photo from "../../images/profile.jpg";
 import Card from "./components/Card.jsx";
 import ImagePopup from "./components/ImagePopup.jsx";
 import Api from "../../utils/api.js";
+import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 
 export default function Main () {
   const api = new Api({
@@ -17,6 +18,7 @@ export default function Main () {
       "Content-Type": "application/json"
     }
   });
+  const currentUser = useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const newCardPopup = {title: "Nuevo lugar", children: <NewCard/>, classPopup: "popup_add"};
@@ -56,8 +58,8 @@ export default function Main () {
           <img className="profile__image-edit" src={editPhoto} alt="Imagen de edición" onClick={() => handleOpenPopup(newEditAvatar)}/>
         </div>
         <div className="profile__info">
-          <h1 className="profile__name">Jacques Cousteau</h1>
-          <p className="profile__about-me">Explorador</p>
+          <h1 className="profile__name">{currentUser.name}</h1>
+          <p className="profile__about-me">{currentUser.about}</p>
           <button className="profile__edit-button" onClick={() => handleOpenPopup(newEditProfile)}></button>
         </div>
         <button className="profile__add-image" onClick={() => handleOpenPopup(newCardPopup)}></button>
