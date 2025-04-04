@@ -59,6 +59,16 @@ export default function Main () {
       .catch((err) => console.error(err));
   }
 
+  function handleCardDelete (card) {
+    api.deleteCard("cards/", card._id)
+      .then(() => {
+        setCards((prevCard) => 
+          prevCard.filter((cardSelected) => cardSelected._id !== card._id)
+        )
+      })
+      .catch((err) => console.error(err));
+  }
+
   return(
     <main>
       <section className="profile">
@@ -76,7 +86,7 @@ export default function Main () {
       <section className="elements">
         <ul className="card__list">
           {cards.map((card) => (
-            <Card key={card._id} card={card} onImageClick={handleImageClick} onCardLike={handleCardLike}/>
+            <Card key={card._id} card={card} onImageClick={handleImageClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>
           ))}
         </ul>
       </section>
