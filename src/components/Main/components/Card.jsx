@@ -1,13 +1,20 @@
 export default function Card (props) {
     const {name, link, isLiked} = props.card;
-    const {onImageClick} = props;
+    const {onImageClick, onCardLike} = props;
+    const cardLikeButtonClassName = `card__like ${
+        isLiked ? 'card__like_active' : ''
+    }`;
+
+    function handleLikeClick () {
+        onCardLike(props.card);
+    }
     return (
         <li className="card">
             <button className="card__delete"></button>
             <img className="card__image" src={link} alt="" onClick={() => onImageClick(props.card)}/>
             <div className="card__footer">
                 <h2 className="card__title">{name}</h2>
-                <button className="card__like"></button>
+                <button className={cardLikeButtonClassName} onClick={handleLikeClick}></button>
             </div>
         </li>
     );
