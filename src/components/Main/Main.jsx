@@ -1,12 +1,12 @@
 import { useState, useEffect, useContext } from "react";
-import Popup from "./Popup/Popup.jsx";
-import NewCard from "../NewCard/NewCard.jsx";
-import EditProfile from "../EditProfile/EditProfile.jsx";
-import EditAvatar from "../EditAvatar/EditAvatar.jsx";
+import Popup from "./components/Popup/Popup.jsx";
+import NewCard from "./components/Popup/NewCard/NewCard.jsx";
+import EditProfile from "./components/Popup/EditProfile/EditProfile.jsx";
+import EditAvatar from "./components/Popup/EditAvatar/EditAvatar.jsx";
 import editPhoto from "../../images/editPhoto.png";
 import photo from "../../images/profile.jpg";
 import Card from "./components/Card/Card.jsx";
-import ImagePopup from "./components/ImagePopup.jsx";
+import ImagePopup from "./components/Popup/ImagePopup/ImagePopup.jsx";
 import Api from "../../utils/api.js";
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 
