@@ -35,6 +35,20 @@ export default function App() {
     })();
   };
 
+  const handleUpdateAvatar = (data) => {
+    (async () => {
+      await api.setProfile("users/me/avatar", data)
+        .then((newAvatar) => {
+          console.log(newAvatar)
+          setCurrentUser((prevUser) => ({
+            ...prevUser,
+            avatar: newAvatar.avatar,
+          }));
+        })
+        .catch((err) => console.error("Error al actualizar el avatar", err))
+    })();
+  }
+
   function handleOpenPopup(popup) {
     setIsPopup(popup);
   }
@@ -45,7 +59,7 @@ export default function App() {
 
   return (
     <>
-      <CurrentUserContext.Provider value={{currentUser, handleUpdateUser}}>
+      <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
         <Header/>
           <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} isPopup={isPopup}/>
         <Footer/>

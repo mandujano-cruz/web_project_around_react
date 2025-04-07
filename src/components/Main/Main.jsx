@@ -18,12 +18,12 @@ export default function Main () {
       "Content-Type": "application/json"
     }
   });
-  const {currentUser} = useContext(CurrentUserContext);
+  const {currentUser, handleUpdateAvatar} = useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const newCardPopup = {title: "Nuevo lugar", children: <NewCard/>, classPopup: "popup_add"};
   const newEditProfile = {title: "Editar perfil", children: <EditProfile onClose={handleClosePopup}/>, classPopup: "popup_edit"};
-  const newEditAvatar = {title: "Cambiar foto de perfil", children: <EditAvatar/>, classPopup: "popup_edit"};
+  const newEditAvatar = {title: "Cambiar foto de perfil", children: <EditAvatar onClose={handleClosePopup} onUpdateAvatar={handleUpdateAvatar} />, classPopup: "popup_edit"};
 
   useEffect(() => {
     api.getInitialCards("cards/")
@@ -73,7 +73,7 @@ export default function Main () {
     <main>
       <section className="profile">
         <div className="profile__container">
-          <img className="profile__image" src={photo} alt="Foto de perfil."/>
+          <img className="profile__image" src={currentUser.avatar} alt="Foto de perfil."/>
           <img className="profile__image-edit" src={editPhoto} alt="Imagen de edición" onClick={() => handleOpenPopup(newEditAvatar)}/>
         </div>
         <div className="profile__info">
