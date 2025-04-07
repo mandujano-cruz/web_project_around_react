@@ -18,11 +18,11 @@ export default function Main () {
       "Content-Type": "application/json"
     }
   });
-  const currentUser = useContext(CurrentUserContext);
+  const {currentUser} = useContext(CurrentUserContext);
   const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
   const newCardPopup = {title: "Nuevo lugar", children: <NewCard/>, classPopup: "popup_add"};
-  const newEditProfile = {title: "Editar perfil", children: <EditProfile/>, classPopup: "popup_edit"};
+  const newEditProfile = {title: "Editar perfil", children: <EditProfile onClose={handleClosePopup}/>, classPopup: "popup_edit"};
   const newEditAvatar = {title: "Cambiar foto de perfil", children: <EditAvatar/>, classPopup: "popup_edit"};
 
   useEffect(() => {

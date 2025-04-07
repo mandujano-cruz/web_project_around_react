@@ -45,7 +45,7 @@ export default class Api {
       })
         .then(this._handleResponse)
         .then((result) => {
-          console.log(result);
+          return result;
         })
         .catch((err) => console.log(err));
     }

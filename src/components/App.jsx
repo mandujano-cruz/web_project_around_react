@@ -7,6 +7,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext.js";
 
 export default function App() {
   const [currentUser, setCurrentUser] = useState({});
+  const [isPopup, setIsPopup] = useState(null);
 
   const api = new Api({
     baseUrl: "https://around-api.es.tripleten-services.com/v1/",
@@ -17,18 +18,38 @@ export default function App() {
   });
 
   useEffect(() => {
-    api.getUserInfo("users/me")
-      .then((data) => setCurrentUser(data))
-      .catch((err) => console.error("Error al obtener el usuario", err));
+    (async () => {
+      await api.getUserInfo("users/me")
+        .then((data) => setCurrentUser(data))
+        .catch((err) => console.error("Error al obtener el usuario", err));
+    })();
   }, []);
+
+  const handleUpdateUser = (data) => {
+    (async () => {
+      await api.setProfile("users/me",data)
+        .then((newData) => {
+          setCurrentUser(newData);
+          handleClosePopup();
+        });
+    })();
+  };
+
+  function handleOpenPopup(popup) {
+    setIsPopup(popup);
+  }
+
+  function handleClosePopup() {
+    setIsPopup(null);
+  }
 
   return (
     <>
-      <Header/>
-      <CurrentUserContext.Provider value={currentUser}>
-        <Main/>
+      <CurrentUserContext.Provider value={{currentUser, handleUpdateUser}}>
+        <Header/>
+          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} isPopup={isPopup}/>
+        <Footer/>
       </CurrentUserContext.Provider>
-      <Footer/>
     </>
   )
 }

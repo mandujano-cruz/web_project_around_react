@@ -1,9 +1,32 @@
-export default function EditProfile() {
+import { useContext, useState } from "react";
+import CurrentUserContext from "../../contexts/CurrentUserContext";
+
+export default function EditProfile({onClose}) {
+  const userContext = useContext(CurrentUserContext);
+  const {currentUser, handleUpdateUser} = userContext;
+  const [name, setName] = useState(currentUser.name);
+  const [description, setDescription] = useState(currentUser.about);
+
+  const handleNameChange = (event) => {
+    setName(event.target.value);
+  };
+
+  const handleDescriptionChange = (event) => {
+    setDescription(event.target.value);
+  }
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    handleUpdateUser({name, about: description});
+    onClose();
+  }
+
     return (
       <form 
         className="popup__container"
         name="profile"
         id="edit-profile" 
+        onSubmit={handleSubmit}
         noValidate
       >
         <input 
@@ -14,6 +37,8 @@ export default function EditProfile() {
           placeholder="Nombre" 
           minLength="2" 
           maxLength="40" 
+          value={name}
+          onChange={handleNameChange}
           required
         />
         <span className="popup__input-error name-input-error"></span>
@@ -25,10 +50,12 @@ export default function EditProfile() {
           placeholder="Acerca de mí"  
           minLength="2" 
           maxLength="200" 
+          value={description}
+          onChange={handleDescriptionChange}
           required
         />
         <span className="popup__input-error about-input-error"></span>
-        <button className="popup__save-button">Guardar</button>
+        <button className="popup__save-button" type="submit">Guardar</button>
       </form>
     );
   }
