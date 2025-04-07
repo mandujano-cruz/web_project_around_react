@@ -1,4 +1,4 @@
-import CurrentUserContext from "../../../contexts/CurrentUserContext";
+import CurrentUserContext from "../../../../contexts/CurrentUserContext";
 
 export default function Card (props) {
     const {name, link, isLiked} = props.card;

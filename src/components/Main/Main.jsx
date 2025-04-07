@@ -5,12 +5,13 @@ import EditProfile from "../EditProfile/EditProfile.jsx";
 import EditAvatar from "../EditAvatar/EditAvatar.jsx";
 import editPhoto from "../../images/editPhoto.png";
 import photo from "../../images/profile.jpg";
-import Card from "./components/Card.jsx";
+import Card from "./components/Card/Card.jsx";
 import ImagePopup from "./components/ImagePopup.jsx";
 import Api from "../../utils/api.js";
 import CurrentUserContext from "../../contexts/CurrentUserContext.js";
 
-export default function Main () {
+export default function Main (props) {
+  const {cards, onCardLike, onCardDelete, onAddPlaceSubmit} = props;
   const api = new Api({
     baseUrl: "https://around-api.es.tripleten-services.com/v1/",
     headers: {
@@ -19,23 +20,23 @@ export default function Main () {
     }
   });
   const {currentUser, handleUpdateAvatar} = useContext(CurrentUserContext);
-  const [cards, setCards] = useState([]);
+  // const [cards, setCards] = useState([]);
   const [popup, setPopup] = useState(null);
-  const newCardPopup = {title: "Nuevo lugar", children: <NewCard/>, classPopup: "popup_add"};
+  const newCardPopup = {title: "Nuevo lugar", children: <NewCard onClose={handleClosePopup} onAddPlaceSubmit={onAddPlaceSubmit} />, classPopup: "popup_add"};
   const newEditProfile = {title: "Editar perfil", children: <EditProfile onClose={handleClosePopup}/>, classPopup: "popup_edit"};
   const newEditAvatar = {title: "Cambiar foto de perfil", children: <EditAvatar onClose={handleClosePopup} onUpdateAvatar={handleUpdateAvatar} />, classPopup: "popup_edit"};
 
-  useEffect(() => {
-    api.getInitialCards("cards/")
-      .then((item) => {
-        if(Array.isArray(item[0])) {
-          setCards(item[0]);
-        } else {
-          console.warn("Respuesta inesperada: ", item);
-        }
-      })
-      .catch((err) => console.error("Error al obtener tarjetas: ", err));
-  }, []);
+  // useEffect(() => {
+  //   api.getInitialCards("cards/")
+  //     .then((item) => {
+  //       if(Array.isArray(item[0])) {
+  //         setCards(item[0]);
+  //       } else {
+  //         console.warn("Respuesta inesperada: ", item);
+  //       }
+  //     })
+  //     .catch((err) => console.error("Error al obtener tarjetas: ", err));
+  // }, []);
 
   function handleOpenPopup(popup) {
     setPopup(popup);
@@ -50,24 +51,24 @@ export default function Main () {
     handleOpenPopup(newPopupImage);
   }
 
-  async function handleCardLike(card) {
-    const isLiked = card.isLiked;
-    await api.toggleLike("cards/", card._id, !isLiked)
-      .then((newCard) => {
-        setCards((state) => state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
-      })
-      .catch((err) => console.error(err));
-  }
+  // async function handleCardLike(card) {
+  //   const isLiked = card.isLiked;
+  //   await api.toggleLike("cards/", card._id, !isLiked)
+  //     .then((newCard) => {
+  //       setCards((state) => state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
+  //     })
+  //     .catch((err) => console.error(err));
+  // }
 
-  function handleCardDelete (card) {
-    api.deleteCard("cards/", card._id)
-      .then(() => {
-        setCards((prevCard) => 
-          prevCard.filter((cardSelected) => cardSelected._id !== card._id)
-        )
-      })
-      .catch((err) => console.error(err));
-  }
+  // function handleCardDelete (card) {
+  //   api.deleteCard("cards/", card._id)
+  //     .then(() => {
+  //       setCards((prevCard) => 
+  //         prevCard.filter((cardSelected) => cardSelected._id !== card._id)
+  //       )
+  //     })
+  //     .catch((err) => console.error(err));
+  // }
 
   return(
     <main>
@@ -86,7 +87,7 @@ export default function Main () {
       <section className="elements">
         <ul className="card__list">
           {cards.map((card) => (
-            <Card key={card._id} card={card} onImageClick={handleImageClick} onCardLike={handleCardLike} onCardDelete={handleCardDelete}/>
+            <Card key={card._id} card={card} onImageClick={handleImageClick} onCardLike={onCardLike} onCardDelete={onCardDelete}/>
           ))}
         </ul>
       </section>

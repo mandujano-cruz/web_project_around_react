@@ -8,6 +8,7 @@ import CurrentUserContext from "../contexts/CurrentUserContext.js";
 export default function App() {
   const [currentUser, setCurrentUser] = useState({});
   const [isPopup, setIsPopup] = useState(null);
+  const [cards, setCards] = useState([]);
 
   const api = new Api({
     baseUrl: "https://around-api.es.tripleten-services.com/v1/",
@@ -18,12 +19,34 @@ export default function App() {
   });
 
   useEffect(() => {
+    api.getInitialCards("cards/")
+      .then((item) => {
+        if(Array.isArray(item[0])) {
+          setCards(item[0]);
+        } else {
+          console.warn("Respuesta inesperada: ", item);
+        }
+      })
+      .catch((err) => console.error("Error al obtener tarjetas: ", err));
+  }, []);
+
+  useEffect(() => {
     (async () => {
       await api.getUserInfo("users/me")
         .then((data) => setCurrentUser(data))
         .catch((err) => console.error("Error al obtener el usuario", err));
     })();
   }, []);
+
+  const handleAddPlaceSubmit = (newCardData) => {
+    api.addCard("cards/", newCardData)
+      .then((newCard) => {
+        console.log("New: ", newCard)
+        setCards([newCard, ...cards]);
+        handleClosePopup();
+      })
+      .catch((err) => console.error("Error al agregar la tarjeta: ", err));
+  }
 
   const handleUpdateUser = (data) => {
     (async () => {
@@ -57,11 +80,30 @@ export default function App() {
     setIsPopup(null);
   }
 
+  async function handleCardLike(card) {
+    const isLiked = card.isLiked;
+    await api.toggleLike("cards/", card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((currentCard) => currentCard._id === card._id ? newCard : currentCard));
+      })
+      .catch((err) => console.error(err));
+  }
+
+  function handleCardDelete (card) {
+    api.deleteCard("cards/", card._id)
+      .then(() => {
+        setCards((prevCard) => 
+          prevCard.filter((cardSelected) => cardSelected._id !== card._id)
+        )
+      })
+      .catch((err) => console.error(err));
+  }
+
   return (
     <>
       <CurrentUserContext.Provider value={{currentUser, handleUpdateUser, handleUpdateAvatar}}>
         <Header/>
-          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} isPopup={isPopup}/>
+          <Main onOpenPopup={handleOpenPopup} onClosePopup={handleClosePopup} isPopup={isPopup} cards={cards} onCardLike={handleCardLike} onCardDelete={handleCardDelete} onAddPlaceSubmit={handleAddPlaceSubmit} />
         <Footer/>
       </CurrentUserContext.Provider>
     </>
