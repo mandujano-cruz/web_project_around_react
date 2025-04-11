@@ -10,85 +10,53 @@ export default class Api {
       }
       return Promise.reject(`Error: ${res.status}`);
     }
-  
-    getInitialCards (endpoint) {
+
+    _request(endpoint, options={}) {
       return fetch(`${this._baseUrl}${endpoint}`, {
         headers: this._headers,
-      })
-        .then(this._handleResponse)
-        .then((result) => {
-          return [result];
-        })
-        .catch((err) => console.log(err));
+        ...options,
+      }).then(this._handleResponse);
+    }
+  
+    getInitialCards (endpoint) {
+      return this._request(endpoint);
     }
   
     getUserInfo (endpoint) {
-      return fetch(`${this._baseUrl}${endpoint}`, {
-        headers: this._headers,
-      })
-        .then(this._handleResponse)
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => console.log(err));
+      return this._request(endpoint);
     }
   
     setProfile (endpoint, data) {
-      return fetch(`${this._baseUrl}${endpoint}`, {
+      return this._request(endpoint, {
         method: "PATCH",
-        headers: this._headers,
         body: JSON.stringify({
           name: data.name,
           about: data.about,
           avatar: data.avatar,
-        })
-      })
-        .then(this._handleResponse)
-        .then((result) => {
-          return result;
-        })
-        .catch((err) => console.log(err));
+        }),
+      });
     }
   
     addCard (endpoint, data) {
-      return fetch(`${this._baseUrl}${endpoint}`, {
-        method: "POST",
-        headers: this._headers,
+      return this._request(endpoint, {
+        method: "POST", 
         body: JSON.stringify({
           name: data.name,
           link: data.link,
-        })
-      })
-        .then(this._handleResponse)
-        .then((result) => {
-          return result
-        })
-        .catch((err) => console.log(err));
+        }),
+      });
     }
   
     toggleLike(endpoint, cardId, isLiked) {
-      const method = isLiked ? "PUT" : "DELETE";
-      return fetch(`${this._baseUrl}${endpoint}${cardId}/likes`, {
-        method: method,
-        headers: this._headers,
-        body: JSON.stringify({
-          isLiked: isLiked,
-        })
-      })
-        .then(this._handleResponse)
-        .then((result) => {
-          return result
-        })
-        .catch((err) => console.log(err));    
+      return this._request(`${endpoint}${cardId}/likes`,{
+        method: isLiked ? "PUT" : "DELETE",
+      });
     }
   
     deleteCard (endpoint, cardId) {
-      return fetch(`${this._baseUrl}${endpoint}${cardId}`, {
+      return this._request(`${endpoint}${cardId}`, {
         method: "DELETE",
-        headers: this._headers,
-      })
-        .then(this._handleResponse)
-        .catch((err) => console.log(err));
+      });
     }
   }
   
